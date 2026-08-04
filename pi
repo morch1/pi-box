@@ -1,0 +1,36 @@
+#!/bin/bash
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+export USER_UID=$(id -u)
+export USER_GID=$(id -g)
+export USERNAME=${DEVCONTAINER_USERNAME:-dev}
+export WORKSPACE="/workspaces/$(basename $(pwd))"
+
+REBUILD=false
+for arg in "$@"; do
+  if [ "$arg" = "--rebuild-pi-box" ]; then
+    REBUILD=true
+    break
+  fi
+done
+
+EXISTS=$(docker image inspect "morchv/dev-box:local-${USERNAME}" >/dev/null 2>&1 && echo "true" || echo "false")
+
+if [ "$REBUILD" = true ] || [ "$EXISTS" = "false" ]; then
+  docker build -t "morchv/dev-box:local-${USERNAME}" "$SCRIPT_DIR"
+fi
+
+if [ "$REBUILD" = false ]; then
+  docker run --rm -it \
+    -e TERM \
+    -e LOCAL_LLM_API_KEY \
+    -e FIRECRAWL_API_KEY \
+    -e FIRECRAWL_API_URL \
+    -v "${DEVCONTAINER_HOME:-${HOME}/.devcontainers-home}:/home/${USERNAME}" \
+    -v "$(pwd):$WORKSPACE" \
+    -w "$WORKSPACE" \
+    --security-opt=no-new-privileges \
+    --cap-drop=ALL \
+    "morchv/dev-box:local-${USERNAME}" \
+    pi "${ARGS[@]}"
+fi
