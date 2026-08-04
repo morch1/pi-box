@@ -1,0 +1,9 @@
+{
+	"id": "pi-box",
+	"version": "0.1.7",
+	"name": "pi-box sandbox + dev container",
+	"description": "Alpine Linux container with Python, Node.js, and the Pi Coding Agent.",
+	"platforms": [
+		"Any"
+	]
+}

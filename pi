@@ -3,7 +3,7 @@ SCRIPT_DIR="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
 
 export USER_UID=$(id -u)
 export USER_GID=$(id -g)
-export USERNAME=${DEVCONTAINER_USERNAME:-dev}
+export USERNAME=$(id -un)
 export WORKSPACE="/workspaces/$(basename $(pwd))"
 
 REBUILD=false
@@ -14,10 +14,10 @@ for arg in "$@"; do
   fi
 done
 
-EXISTS=$(docker image inspect "morchv/dev-box:local-${USERNAME}" >/dev/null 2>&1 && echo "true" || echo "false")
+EXISTS=$(docker image inspect "morchv/pi-box:local-${USER_UID}" >/dev/null 2>&1 && echo "true" || echo "false")
 
 if [ "$REBUILD" = true ] || [ "$EXISTS" = "false" ]; then
-  docker build -t "morchv/dev-box:local-${USERNAME}" "$SCRIPT_DIR"
+  docker build -t "morchv/pi-box:local-${USER_UID}" "$SCRIPT_DIR"
 fi
 
 if [ "$REBUILD" = false ]; then
@@ -31,6 +31,6 @@ if [ "$REBUILD" = false ]; then
     -w "$WORKSPACE" \
     --security-opt=no-new-privileges \
     --cap-drop=ALL \
-    "morchv/dev-box:local-${USERNAME}" \
+    "morchv/pi-box:local-${USER_UID}" \
     pi "${ARGS[@]}"
 fi
