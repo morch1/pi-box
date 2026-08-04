@@ -17,7 +17,12 @@ done
 EXISTS=$(docker image inspect "morchv/pi-box:local-${USER_UID}" >/dev/null 2>&1 && echo "true" || echo "false")
 
 if [ "$REBUILD" = true ] || [ "$EXISTS" = "false" ]; then
-  docker build -t "morchv/pi-box:local-${USER_UID}" "$SCRIPT_DIR"
+  docker build \
+    --build-arg USER_UID="${USER_UID}" \
+    --build-arg USER_GID="${USER_GID}" \
+    --build-arg USERNAME="${USERNAME}" \
+    -t "morchv/pi-box:local-${USER_UID}" \
+    "$SCRIPT_DIR"
 fi
 
 if [ "$REBUILD" = false ]; then
