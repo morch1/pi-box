@@ -15,6 +15,7 @@ COPY --from=node /usr/local/ /usr/local/
 
 RUN apk add --no-cache \
     bash \
+    curl \
     ca-certificates \
     fd \
     git \
