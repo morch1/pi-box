@@ -1,18 +1,33 @@
 #!/bin/bash
 SCRIPT_DIR="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
 
+REBUILD=false
+WORKSPACE_PATH=""
+WORKSPACE_SET=false
+ARGS=()
+for arg in "$@"; do
+  case "$arg" in
+    --workspace=*)
+      WORKSPACE_PATH="${arg#--workspace=}"
+      WORKSPACE_SET=true
+      ;;
+    --rebuild-pi-box)
+      REBUILD=true
+      ;;
+    *)
+      ARGS+=("$arg")
+      ;;
+  esac
+done
+
+if [ "$WORKSPACE_SET" = true ]; then
+  cd -- "$WORKSPACE_PATH" || exit 1
+fi
+
 export USER_UID=$(id -u)
 export USER_GID=$(id -g)
 export USERNAME=$(id -un)
-export WORKSPACE="/workspaces/$(basename $(pwd))"
-
-REBUILD=false
-for arg in "$@"; do
-  if [ "$arg" = "--rebuild-pi-box" ]; then
-    REBUILD=true
-    break
-  fi
-done
+export WORKSPACE="/workspaces/$(basename "$(pwd)")"
 
 EXISTS=$(docker image inspect "morchv/pi-box:local-${USER_UID}" >/dev/null 2>&1 && echo "true" || echo "false")
 
