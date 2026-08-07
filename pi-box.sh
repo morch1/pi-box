@@ -7,6 +7,7 @@ PI_BOX_IMAGE="${PI_BOX_IMAGE:-morchv/pi-box:latest}"
 uid="$(id -u)"
 gid="$(id -g)"
 workspace="/workspace/$(basename $(pwd))"
+home_dir="${PI_BOX_HOME:-${HOME}/.pi-box/home}"
 
 args=(
     --rm -it
@@ -16,7 +17,7 @@ args=(
     -e LOCAL_LLM_API_KEY
     -e FIRECRAWL_API_KEY
     -e FIRECRAWL_API_URL
-    -v "${PI_BOX_HOME:-${HOME}/.pi-box-home}:/home/pi"
+    -v "${home_dir}:/home/pi"
     -v "$(pwd):$workspace"
     -w "$workspace"
     --security-opt=no-new-privileges
