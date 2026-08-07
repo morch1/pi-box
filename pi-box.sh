@@ -34,4 +34,4 @@ for supplementary_gid in $(id -G); do
     fi
 done
 
-"${DOCKER_BIN}" run "${args[@]}" "${PI_BOX_IMAGE}" "$@"
+"${DOCKER_BIN}" run "${args[@]}" "${PI_BOX_IMAGE}" pi "$@"
