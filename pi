@@ -1,5 +1,6 @@
 #!/bin/bash
 SCRIPT_DIR="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
+DOCKER_BIN="${DOCKER_BIN:-docker}"
 
 REBUILD=false
 WORKSPACE_PATH=""
@@ -29,10 +30,10 @@ export USER_GID=$(id -g)
 export USERNAME=$(id -un)
 export WORKSPACE="/workspaces/$(basename "$(pwd)")"
 
-EXISTS=$(docker image inspect "morchv/pi-box:local-${USER_UID}" >/dev/null 2>&1 && echo "true" || echo "false")
+EXISTS=$("${DOCKER_BIN}" image inspect "morchv/pi-box:local-${USER_UID}" >/dev/null 2>&1 && echo "true" || echo "false")
 
 if [ "$REBUILD" = true ] || [ "$EXISTS" = "false" ]; then
-  docker build \
+  "${DOCKER_BIN}" build \
     --build-arg USER_UID="${USER_UID}" \
     --build-arg USER_GID="${USER_GID}" \
     --build-arg USERNAME="${USERNAME}" \
@@ -41,7 +42,7 @@ if [ "$REBUILD" = true ] || [ "$EXISTS" = "false" ]; then
 fi
 
 if [ "$REBUILD" = false ]; then
-  docker run --rm -it \
+  "${DOCKER_BIN}" run --rm -it \
     -e TERM \
     -e LOCAL_LLM_API_KEY \
     -e FIRECRAWL_API_KEY \
