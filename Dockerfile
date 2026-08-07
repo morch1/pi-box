@@ -12,6 +12,10 @@ ARG USERNAME=dev
 ARG USER_UID=1000
 ARG USER_GID=${USER_UID}
 
+ENV PYTHONBUFFERED=1
+ENV TERM=xterm-256color
+ENV HOME="/home/${USERNAME}"
+
 RUN apk add --no-cache \
     bash \
     curl \
@@ -25,8 +29,9 @@ RUN apk add --no-cache \
   && npm cache clean --force \
   && addgroup -g "${USER_GID}" "${USERNAME}" \
   && adduser -D -u "${USER_UID}" -G "${USERNAME}" -s /bin/bash "${USERNAME}" \
-  && mkdir -p "/home/${USERNAME}/.pi/agent" "/home/${USERNAME}/.vscode-server" "${WORKSPACE}" \
-  && chown -R "${USERNAME}:${USERNAME}" "/home/${USERNAME}" "${WORKSPACE}"
+  && mkdir -p "/${HOME}/.pi/agent" "/${HOME}/.vscode-server" "${WORKSPACE}" \
+  && chown -R "${USERNAME}:${USERNAME}" "/${HOME}" "${WORKSPACE}"
+
 
 USER "${USERNAME}"
 WORKDIR "${WORKSPACE}"

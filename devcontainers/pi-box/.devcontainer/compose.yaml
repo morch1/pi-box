@@ -2,7 +2,6 @@ services:
   devcontainer:
     image: morchv/pi-box:latest
     environment:
-      - TERM
       - LOCAL_LLM_API_KEY
       - FIRECRAWL_API_KEY
       - FIRECRAWL_API_URL
