@@ -3,5 +3,5 @@
   "dockerComposeFile": "compose.yaml",
   "service": "devcontainer",
   "workspaceFolder": "/workspace/${localWorkspaceFolderBasename}_devcontainer",
-  "postCreateCommand": "[ -f requirements.txt ] && python -m pip install -r requirements.txt || :"
+  "postCreateCommand": "./.devcontainer/post-create.sh"
 }
