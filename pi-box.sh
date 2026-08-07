@@ -1,6 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
+DOCKER_BIN="${DOCKER_BIN:-docker}"
+PI_BOX_IMAGE="${PI_BOX_IMAGE:-morchv/pi-box:latest}"
+
 uid="$(id -u)"
 gid="$(id -g)"
 workspace="/workspace/$(basename $(pwd))"
@@ -20,10 +23,14 @@ args=(
     --cap-drop=ALL
 )
 
+if [[ "$(basename "${DOCKER_BIN}")" == "podman" ]]; then
+    args+=(--userns=keep-id)
+fi
+
 for supplementary_gid in $(id -G); do
     if [[ "$supplementary_gid" != "$gid" ]]; then
         args+=(--group-add "$supplementary_gid")
     fi
 done
 
-"${DOCKER_BIN:-docker}" run "${args[@]}" "${PI_BOX_IMAGE:-morchv/pi-box:latest}" "$@"
+"${DOCKER_BIN}" run "${args[@]}" "${PI_BOX_IMAGE}" "$@"
