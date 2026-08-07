@@ -47,7 +47,7 @@ if [ "$REBUILD" = false ]; then
     -e LOCAL_LLM_API_KEY \
     -e FIRECRAWL_API_KEY \
     -e FIRECRAWL_API_URL \
-    -v "${DEVCONTAINER_HOME:-${HOME}/.devcontainers-home}:/home/${USERNAME}" \
+    -v "${PI_BOX_HOME:-${HOME}/.pi-box-home}:/home/${USERNAME}" \
     -v "$(pwd):$WORKSPACE" \
     -w "$WORKSPACE" \
     --security-opt=no-new-privileges \
