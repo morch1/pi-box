@@ -1,17 +1,16 @@
 ARG ALPINE_VERSION=3.24
-ARG PYTHON_VERSION=3.14.6
 ARG NODE_VERSION=26.5.0
-ARG PI_VERSION=0.84.1
-
+ARG PYTHON_VERSION=3.14.6
 FROM node:${NODE_VERSION}-alpine${ALPINE_VERSION} AS node
 FROM python:${PYTHON_VERSION}-alpine${ALPINE_VERSION}
 
+COPY --from=node /usr/local/ /usr/local/
+
+ARG PI_VERSION=latest
 ARG WORKSPACE=/workspace
 ARG USERNAME=dev
 ARG USER_UID=1000
 ARG USER_GID=${USER_UID}
-
-COPY --from=node /usr/local/ /usr/local/
 
 RUN apk add --no-cache \
     bash \
@@ -29,8 +28,6 @@ RUN apk add --no-cache \
   && mkdir -p "/home/${USERNAME}/.pi/agent" "/home/${USERNAME}/.vscode-server" "${WORKSPACE}" \
   && chown -R "${USERNAME}:${USERNAME}" "/home/${USERNAME}" "${WORKSPACE}"
 
-WORKDIR "${WORKSPACE}"
-
 USER "${USERNAME}"
-
+WORKDIR "${WORKSPACE}"
 CMD ["sleep", "infinity"]
