@@ -6,7 +6,6 @@ PI_BOX_IMAGE="${PI_BOX_IMAGE:-morchv/pi-box:latest}"
 PI_BOX_HOME="${PI_BOX_HOME:-${HOME}/.pi-box/home}"
 
 DEFAULT_WORKSPACE="$(pwd)"
-DEFAULT_WORKDIR="/workspace/$(basename "$(pwd)")"
 
 # Parse optional CLI arguments
 while [[ $# -gt 0 ]]; do
@@ -26,6 +25,8 @@ while [[ $# -gt 0 ]]; do
 done
 
 WORKSPACE="${WORKSPACE:-$DEFAULT_WORKSPACE}"
+
+DEFAULT_WORKDIR="/workspace/$(basename "$WORKSPACE")"
 WORKDIR="${WORKDIR:-$DEFAULT_WORKDIR}"
 
 uid="$(id -u)"
@@ -40,7 +41,7 @@ args=(
     -e FIRECRAWL_API_KEY
     -e FIRECRAWL_API_URL
     -v "${PI_BOX_HOME}:/home/pi"
-    -v "${WORKSPACE}:${WORKDIR}"
+    -v "${WORKSPACE}:${DEFAULT_WORKDIR}"
     -w "${WORKDIR}"
     --security-opt=no-new-privileges
     --cap-drop=ALL

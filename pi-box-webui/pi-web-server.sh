@@ -1,5 +1,8 @@
 #!/bin/bash
 
+mkdir -p "$HOME/.config/pi-web"
+cp /etc/pi-web/config.json "$HOME/.config/pi-web/config.json"
+
 pi-web-sessiond 2>&1 &
 sessiond_pid=$!
 
