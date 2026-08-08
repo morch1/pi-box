@@ -3,11 +3,33 @@ set -euo pipefail
 
 DOCKER_BIN="${DOCKER_BIN:-docker}"
 PI_BOX_IMAGE="${PI_BOX_IMAGE:-morchv/pi-box:latest}"
+PI_BOX_HOME="${PI_BOX_HOME:-${HOME}/.pi-box/home}"
+
+DEFAULT_WORKSPACE="$(pwd)"
+DEFAULT_WORKDIR="/workspace/$(basename "$(pwd)")"
+
+# Parse optional CLI arguments
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --workspace)
+            WORKSPACE="$2"
+            shift 2
+            ;;
+        --workdir)
+            WORKDIR="$2"
+            shift 2
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
+WORKSPACE="${WORKSPACE:-$DEFAULT_WORKSPACE}"
+WORKDIR="${WORKDIR:-$DEFAULT_WORKDIR}"
 
 uid="$(id -u)"
 gid="$(id -g)"
-workspace="/workspace/$(basename $(pwd))"
-home_dir="${PI_BOX_HOME:-${HOME}/.pi-box/home}"
 
 args=(
     --rm -it
@@ -17,9 +39,9 @@ args=(
     -e LOCAL_LLM_API_KEY
     -e FIRECRAWL_API_KEY
     -e FIRECRAWL_API_URL
-    -v "${home_dir}:/home/pi"
-    -v "$(pwd):$workspace"
-    -w "$workspace"
+    -v "${PI_BOX_HOME}:/home/pi"
+    -v "${WORKSPACE}:${WORKDIR}"
+    -w "${WORKDIR}"
     --security-opt=no-new-privileges
     --cap-drop=ALL
 )
