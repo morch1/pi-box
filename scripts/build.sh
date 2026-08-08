@@ -41,17 +41,20 @@ docker tag morchv/pi-box:"$VERSION" morchv/pi-box:latest
 docker tag morchv/pi-box:"$VERSION" "$REGISTRY_URL/morchv/pi-box:$VERSION"
 docker tag morchv/pi-box:"$VERSION" "$REGISTRY_URL/morchv/pi-box:latest"
 
-docker build "${DOCKER_BUILD_ARGS[@]}" -t morchv/pi-box-webui:"$VERSION" \
+docker build "${DOCKER_BUILD_ARGS[@]}" -t morchv/pi-box-paseo:"$VERSION" \
   --build-arg PI_BOX_VERSION="$VERSION" \
-  "$ROOT_DIR/pi-box-webui"
-docker tag morchv/pi-box-webui:"$VERSION" morchv/pi-box-webui:latest
-docker tag morchv/pi-box-webui:"$VERSION" "$REGISTRY_URL/morchv/pi-box-webui:$VERSION"
-docker tag morchv/pi-box-webui:"$VERSION" "$REGISTRY_URL/morchv/pi-box-webui:latest"
+  "$ROOT_DIR/pi-box-paseo"
+docker tag morchv/pi-box-paseo:"$VERSION" morchv/pi-box-paseo:latest
+docker tag morchv/pi-box-paseo:"$VERSION" "$REGISTRY_URL/morchv/pi-box-paseo:$VERSION"
+docker tag morchv/pi-box-paseo:"$VERSION" "$REGISTRY_URL/morchv/pi-box-paseo:latest"
 
 if [ "$RELEASE" = true ]; then
   echo "Pushing images to registry..."
   docker push "$REGISTRY_URL/morchv/pi-box:$VERSION"
   docker push "$REGISTRY_URL/morchv/pi-box:latest"
+
+  docker push "$REGISTRY_URL/morchv/pi-box-paseo:$VERSION"
+  docker push "$REGISTRY_URL/morchv/pi-box-paseo:latest"
 
   echo "Publishing devcontainer templates to registry..."
   devcontainer templates publish -r "$REGISTRY_URL" -n morchv/devcontainers devcontainers

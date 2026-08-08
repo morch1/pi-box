@@ -3,7 +3,8 @@ set -euo pipefail
 
 DOCKER_BIN="${DOCKER_BIN:-docker}"
 PI_BOX_IMAGE="${PI_BOX_IMAGE:-morchv/pi-box:latest}"
-PI_BOX_HOME="${PI_BOX_HOME:-${HOME}/.pi-box/home}"
+PI_BOX_ROOT="${PI_BOX_ROOT:-${HOME}/.pi-box}"
+PI_BOX_HOME="${PI_BOX_HOME:-${PI_BOX_ROOT}/home}"
 
 DEFAULT_WORKSPACE="$(pwd)"
 
@@ -56,5 +57,7 @@ for supplementary_gid in $(id -G); do
         args+=(--group-add "$supplementary_gid")
     fi
 done
+
+[ ! -f "$PI_BOX_ROOT/pi-box.env" ] || export $(grep -v '^#' "$PI_BOX_ROOT/pi-box.env" | xargs)
 
 "${DOCKER_BIN}" run "${args[@]}" "${PI_BOX_IMAGE}" pi "$@"
