@@ -24,13 +24,13 @@ RUN apk add --no-cache \
     openssh-client \
     ripgrep \
     jq \
+    build-base \
   && npm install --global --omit=dev "@earendil-works/pi-coding-agent@${PI_VERSION}" \
   && npm cache clean --force \
   && addgroup -g "${DEV_GID}" "${DEV_USER}" \
   && adduser -D -u "${DEV_UID}" -G "${DEV_USER}" -s /bin/bash "${DEV_USER}" \
   && mkdir -p "/home/${DEV_USER}/.vscode-server" \
   && chown "${DEV_USER}:${DEV_USER}" "/home/${DEV_USER}/.vscode-server"
-
 
 USER ${DEV_USER}
 

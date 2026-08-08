@@ -32,6 +32,13 @@ docker tag morchv/pi-box:"$VERSION" morchv/pi-box:latest
 docker tag morchv/pi-box:"$VERSION" "$REGISTRY_URL/morchv/pi-box:$VERSION"
 docker tag morchv/pi-box:"$VERSION" "$REGISTRY_URL/morchv/pi-box:latest"
 
+docker build -t morchv/pi-box-webui:"$VERSION" \
+  --build-arg PI_BOX_VERSION="$VERSION" \
+  "$ROOT_DIR/pi-box-webui"
+docker tag morchv/pi-box-webui:"$VERSION" morchv/pi-box-webui:latest
+docker tag morchv/pi-box-webui:"$VERSION" "$REGISTRY_URL/morchv/pi-box-webui:$VERSION"
+docker tag morchv/pi-box-webui:"$VERSION" "$REGISTRY_URL/morchv/pi-box-webui:latest"
+
 if [ "$RELEASE" = true ]; then
   echo "Pushing images to registry..."
   docker push "$REGISTRY_URL/morchv/pi-box:$VERSION"

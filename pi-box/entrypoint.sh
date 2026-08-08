@@ -6,6 +6,7 @@ gid="$(id -g)"
 
 username="${CONTAINER_USER:-dev}"
 groupname="${CONTAINER_GROUP:-dev}"
+export HOME="/home/${username}"
 
 # Use a location the arbitrary runtime UID can write to.
 runtime_dir="${TMPDIR:-/tmp}/container-user-${uid}"
@@ -24,7 +25,7 @@ cp /etc/group "$group_file"
 if getent passwd "$uid" >/dev/null 2>&1; then
     sed -i "s/^\([^:]*\):x:${uid}:/${username}:x:${uid}:/" "$passwd_file"
 else
-    echo "${username}:x:${uid}:${gid}:${username}:${HOME:-/home/${username}}:/bin/bash" >> "$passwd_file"
+    echo "${username}:x:${uid}:${gid}:${username}:${HOME}:/bin/bash" >> "$passwd_file"
 fi
 
 if getent group "$gid" >/dev/null 2>&1; then
@@ -37,6 +38,5 @@ export NSS_WRAPPER_PASSWD="$passwd_file"
 export NSS_WRAPPER_GROUP="$group_file"
 export LD_PRELOAD="/usr/lib/libnss_wrapper.so${LD_PRELOAD:+:$LD_PRELOAD}"
 export TERM=xterm-256color
-export HOME="/home/${username}"
 
 exec "$@"
