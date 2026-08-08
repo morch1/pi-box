@@ -32,8 +32,10 @@ WORKDIR="${WORKDIR:-$DEFAULT_WORKDIR}"
 
 uid="$(id -u)"
 gid="$(id -g)"
+container_name="pi-box--$(basename "$WORKSPACE")--$(openssl rand -hex 4)"
 
 args=(
+    --name "$container_name"
     --rm -it
     --user "${uid}:${gid}"
     -e CONTAINER_USER=pi
