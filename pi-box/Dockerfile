@@ -1,6 +1,6 @@
-ARG ALPINE_VERSION=3.24
-ARG NODE_VERSION=26.5.0
-ARG PYTHON_VERSION=3.14.6
+ARG ALPINE_VERSION=latest
+ARG NODE_VERSION=latest
+ARG PYTHON_VERSION=latest
 FROM node:${NODE_VERSION}-alpine${ALPINE_VERSION} AS node
 FROM python:${PYTHON_VERSION}-alpine${ALPINE_VERSION}
 
@@ -23,6 +23,7 @@ RUN apk add --no-cache \
     libstdc++ \
     openssh-client \
     ripgrep \
+    jq \
   && npm install --global --omit=dev "@earendil-works/pi-coding-agent@${PI_VERSION}" \
   && npm cache clean --force \
   && addgroup -g "${DEV_GID}" "${DEV_USER}" \
