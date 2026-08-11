@@ -7,6 +7,6 @@ services:
     command: sleep infinity
     working_dir: /workspace/${COMPOSE_PROJECT_NAME}
     volumes:
-      - ..:/workspace/${COMPOSE_PROJECT_NAME}
-      - ${PI_BOX_HOME:-${PI_BOX_ROOT:-${HOME}/.pi-box}/home}:/home/dev
+      - ..:/workspace/${COMPOSE_PROJECT_NAME}:z
+      - ${PI_BOX_HOME:-${PI_BOX_ROOT:-${HOME}/.pi-box}/home}:/home/dev:z
       - /home/dev/.vscode-server

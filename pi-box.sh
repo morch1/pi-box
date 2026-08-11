@@ -45,17 +45,17 @@ args=(
     -e LOCAL_LLM_API_KEY
     -e FIRECRAWL_API_KEY
     -e FIRECRAWL_API_URL
-    -v "${WORKSPACE}:${DEFAULT_WORKDIR}"
+    -v "${WORKSPACE}:${DEFAULT_WORKDIR}:z"
     -w "${WORKDIR}"
     --security-opt=no-new-privileges
     --cap-drop=ALL
 )
 
 if [ "$PUID" -eq 0 ]; then
-    args+=(-v "${PI_BOX_HOME}:/root")
+    args+=(-v "${PI_BOX_HOME}:/root:z")
 else
     args+=(
-        -v "${PI_BOX_HOME}:/home/pi"
+        -v "${PI_BOX_HOME}:/home/pi:z"
         -e CONTAINER_USER=pi
         -e CONTAINER_GROUP=pi
     )
