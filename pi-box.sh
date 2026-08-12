@@ -38,6 +38,8 @@ WORKDIR="${WORKDIR:-$DEFAULT_WORKDIR}"
 
 container_name="pi-box--$(basename "$WORKSPACE")--$(openssl rand -hex 4)"
 
+[[ "$(basename "${DOCKER_BIN}")" == "podman" ]] && is_podman=true || is_podman=false
+
 args=(
     --name "$container_name"
     --rm -it
@@ -59,16 +61,20 @@ else
         -e CONTAINER_USER=pi
         -e CONTAINER_GROUP=pi
     )
-    if [[ "$(basename "${DOCKER_BIN}")" == "podman" ]]; then
+    if $is_podman; then
         args+=(--userns=keep-id)
     fi
 fi
 
-for supplementary_gid in $SUPP_PGIDS; do
-    if [[ "$supplementary_gid" != "$PGID" ]]; then
-        args+=(--group-add "$supplementary_gid")
-    fi
-done
+if $is_podman; then
+    args+=(--group-add keep-groups)
+else
+    for supplementary_gid in $SUPP_PGIDS; do
+        if [[ "$supplementary_gid" != "$PGID" ]]; then
+            args+=(--group-add "$supplementary_gid")
+        fi
+    done
+fi
 
 [ ! -f "$PI_BOX_ENV_FILE" ] || export $(grep -v '^#' "$PI_BOX_ENV_FILE" | xargs)
 
