@@ -10,7 +10,6 @@ services:
     volumes:
       - "..:/workspace/${COMPOSE_PROJECT_NAME}:z"
       - "${PI_BOX_ROOT:-~/.pi-box}/home:/home/pi:z"
-      - "/home/pi/.vscode-server"
     cap_drop:
       - ALL
     security_opt:
