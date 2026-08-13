@@ -1,12 +1,34 @@
+x-podman:
+  in_pod: false
+
 services:
   devcontainer:
     image: ${PI_BOX_IMAGE:-morchv/pi-box:latest}
+    container_name: pi-box_${COMPOSE_PROJECT_NAME}
+    hostname: devcontainer
     env_file:
-      - path: ${PI_BOX_ENV_FILE:-${PI_BOX_ROOT:-${HOME}/.pi-box}/pi-box.env}
+      - path: ${PI_BOX_ENV_FILE:-${PI_BOX_ROOT:-~/.pi-box}/pi-box.env}
         required: false
     command: sleep infinity
+    userns_mode: keep-id:uid=1000,gid=1000
+    group_add:
+      - keep-groups
     working_dir: /workspace/${COMPOSE_PROJECT_NAME}
     volumes:
-      - ..:/workspace/${COMPOSE_PROJECT_NAME}:z
-      - ${PI_BOX_HOME:-${PI_BOX_ROOT:-${HOME}/.pi-box}/home}:/home/dev:z
-      - /home/dev/.vscode-server
+      - "..:/workspace/${COMPOSE_PROJECT_NAME}:z"
+      - "${PI_BOX_ROOT:-~/.pi-box}/home:/home/pi:z"
+      - "/home/pi/.vscode-server:Z"
+    cap_drop:
+      - ALL
+    cap_add:
+      - DAC_OVERRIDE
+      - SETUID
+      - SETGID
+      - SYS_CHROOT
+      - SETFCAP
+    security_opt:
+      - label=nested
+      - seccomp=unconfined
+    devices:
+      - /dev/fuse
+      - /dev/net/tun
