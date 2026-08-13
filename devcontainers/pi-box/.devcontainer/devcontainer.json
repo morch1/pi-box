@@ -5,6 +5,6 @@
   "containerUser": "pi",
   "remoteUser": "pi",
   "updateRemoteUserUID": true,
-  "workspaceFolder": "/workspace/${localWorkspaceFolderBasename}devcontainer",
+  "workspaceFolder": "/workspace/${localWorkspaceFolderBasename}_devcontainer",
   "postCreateCommand": "chmod +x ./.devcontainer/post-create.sh && ./.devcontainer/post-create.sh"
 }
