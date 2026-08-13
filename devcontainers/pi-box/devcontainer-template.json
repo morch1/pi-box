@@ -1,7 +1,7 @@
 {
 	"id": "pi-box",
-	"version": "0.3.22",
+	"version": "0.3.28",
 	"name": "pi-box dev container",
-	"description": "Alpine Linux container with Python, Node.js, and the Pi Coding Agent.",
+	"description": "pi-box dev container",
 	"platforms": ["Any"]
 }

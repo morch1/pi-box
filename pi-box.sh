@@ -11,10 +11,10 @@ PI_BOX_ENV_FILE="${PI_BOX_ENV_FILE:-${PI_BOX_ROOT}/pi-box.env}"
 WORKSPACE="$(pwd)"
 WORKDIR="/workspace/$(basename "$WORKSPACE")"
 
-container_name="pi-box--$(basename "$WORKSPACE")--$(openssl rand -hex 4)"
+vm_name="pi-box-$(basename "$WORKSPACE")-$(openssl rand -hex 4)"
 
 args=(
-    --name "$container_name"
+    --name "$vm_name"
     --hostname "pi-box"
     --entrypoint /usr/local/bin/entrypoint.msb.sh
     --workdir "${WORKDIR}"
@@ -37,4 +37,4 @@ elif [[ "${1:-}" == "update" ]]; then
 fi
 
 msb run "${args[@]}" "${PI_BOX_IMAGE}" -- "$command" "$@"
-msb rm --force --quiet "$container_name"
+msb rm --force --quiet "$vm_name"

@@ -33,7 +33,8 @@ RUN set -eux \
     pipx
 
 ARG PI_VERSION
-RUN npm install --global --omit=dev "@earendil-works/pi-coding-agent@${PI_VERSION}" \
+RUN npm install --global "@earendil-works/pi-coding-agent@${PI_VERSION}" \
+  && npm install --global @devcontainers/cli \
   && npm cache clean --force
 
 ENV USERNAME=pi
