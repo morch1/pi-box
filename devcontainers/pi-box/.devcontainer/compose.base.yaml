@@ -1,6 +1,6 @@
 services:
   devcontainer:
-    image: ${PI_BOX_IMAGE:-morchv/pi-box-devcontainer:latest}
+    image: ${PI_BOX_IMAGE:-morchv/pi-box:latest}
     container_name: pi-box_${COMPOSE_PROJECT_NAME}
     hostname: devcontainer
     env_file:

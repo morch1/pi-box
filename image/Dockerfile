@@ -1,5 +1,4 @@
 ARG APLINE_VERSION=3.24
-# pi-box-devcontainer builds: set BASE to python:3.14
 ARG BASE=docker:29.7.2-dind
 ARG NODE_VERSION=26.7.0
 ARG UV_VERSION=0.12.3
