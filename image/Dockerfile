@@ -42,6 +42,7 @@ ENV UID=1000
 ENV GID=1000
 ENV TERM=xterm-256color
 ENV HOME=/home/${USERNAME}
+ENV UV_LINK_MODE=copy
 
 RUN set -eux \
   && addgroup -g "${GID}" "${USERNAME}" \
