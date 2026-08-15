@@ -19,22 +19,23 @@ RUN chmod +x /usr/local/bin/entrypoint.docker.sh
 RUN set -eux \
   && apk add --no-cache \
     bash \
+    build-base \
     curl \
     ca-certificates \
     fd \
     git \
+    jq \
     libstdc++ \
     openssh-client \
+    pipx \
     ripgrep \
-    jq \
-    build-base \
     vim \
-    wget \
-    pipx
+    wget
 
 ARG PI_VERSION
-RUN npm install --global "@earendil-works/pi-coding-agent@${PI_VERSION}" \
-  && npm install --global @devcontainers/cli \
+RUN npm install --global --omit=dev \
+    @earendil-works/pi-coding-agent@${PI_VERSION} \
+    @devcontainers/cli \
   && npm cache clean --force
 
 RUN git clone https://github.com/morch1/dev-scripts.git /opt/dev-scripts \
@@ -42,11 +43,11 @@ RUN git clone https://github.com/morch1/dev-scripts.git /opt/dev-scripts \
   && ln -s /opt/dev-scripts/scripts/* /usr/local/bin/
 
 ENV USERNAME=pi
-ENV UID=1000
-ENV GID=1000
-ENV TERM=xterm-256color
-ENV HOME=/home/${USERNAME}
-ENV UV_LINK_MODE=copy
+ENV UID=1000 \
+    GID=1000 \
+    TERM=xterm-256color \
+    UV_LINK_MODE=copy \
+    HOME=/home/${USERNAME}
 
 RUN set -eux \
   && addgroup -g "${GID}" "${USERNAME}" \
