@@ -26,6 +26,7 @@ args=(
 
 if $is_podman; then
     args+=(
+        --user=1000:1000
         --userns=keep-id:uid=1000,gid=1000
         --group-add keep-groups
     )
@@ -56,4 +57,4 @@ elif [[ "${1:-}" == "update" ]]; then
     "${DOCKER_BIN}" pull "${PI_BOX_IMAGE}"
 fi
 
-"${DOCKER_BIN}" run "${args[@]}" "${PI_BOX_IMAGE}" -- "$command" "$@"
+"${DOCKER_BIN}" run "${args[@]}" "${PI_BOX_IMAGE}" "$command" "$@"
